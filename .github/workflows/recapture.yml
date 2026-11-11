@@ -1,0 +1,42 @@
+name: Recapture
+
+# Re-injects each incident on a real systemd runner and checks that the evidence
+# tests still hold against the fresh capture. The committed snapshots stay the
+# benchmark input; this job only detects drift.
+
+on:
+  schedule:
+    - cron: "17 5 * * 1"
+  workflow_dispatch:
+
+jobs:
+  recapture:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        incident: [fd-exhaustion, memory-ceiling-parent-slice, restart-loop]
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+
+      - name: Install
+        run: pip install -e ".[dev]"
+
+      - name: Inject and capture
+        run: |
+          SICKBAY_BIN="$(command -v sickbay)" scripts/reproduce.sh \
+            "${{ matrix.incident }}" "$RUNNER_TEMP/snap/${{ matrix.incident }}"
+
+      - name: Evidence tests against the fresh capture
+        env:
+          SICKBAY_SNAPSHOT_ROOT: ${{ runner.temp }}/snap
+        run: |
+          SICKBAY_REAL_USER="$(id -un)" SICKBAY_REAL_HOST="$(hostname)"             pytest tests/test_incidents.py --no-cov
+
+      - name: Cleanup
+        if: always()
+        run: sudo "incidents/${{ matrix.incident }}/cleanup.sh"
