@@ -35,7 +35,36 @@ jobs:
         env:
           SICKBAY_SNAPSHOT_ROOT: ${{ runner.temp }}/snap
         run: |
-          SICKBAY_REAL_USER="$(id -un)" SICKBAY_REAL_HOST="$(hostname)"             pytest tests/test_incidents.py --no-cov
+          SICKBAY_REAL_USER="$(id -un)" SICKBAY_REAL_HOST="$(hostname)" \
+            pytest tests/test_incidents.py --no-cov
+
+      - name: Show where leak strings occur (on failure)
+        if: failure()
+        env:
+          SNAP: ${{ runner.temp }}/snap/${{ matrix.incident }}
+          WORDS: ${{ matrix.incident }}
+        run: |
+          WORDS="$WORDS $(id -un) $(hostname)" python - <<'EOF'
+          import json, os, pathlib
+          snap = pathlib.Path(os.environ["SNAP"])
+          words = [w.lower() for w in os.environ["WORDS"].split()]
+          for line in (snap / "journal.jsonl").read_text(errors="replace").splitlines():
+              e = json.loads(line)
+              for k, v in e.items():
+                  s = str(v).lower()
+                  for w in words:
+                      i = s.find(w)
+                      if i >= 0:
+                          print(w, "|", e.get("syslog_identifier") or e.get("SYSLOG_IDENTIFIER"),
+                                "|", e.get("_systemd_unit") or e.get("_SYSTEMD_UNIT"), "|", k,
+                                "|", s[max(0, i - 80):i + 80])
+          for p in snap.rglob("*"):
+              if p.is_file() and p.name != "journal.jsonl":
+                  b = p.read_bytes().lower()
+                  for w in words:
+                      if w.encode() in b:
+                          print("file:", p.relative_to(snap), "contains", w)
+          EOF
 
       - name: Cleanup
         if: always()

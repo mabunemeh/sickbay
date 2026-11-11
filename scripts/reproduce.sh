@@ -60,6 +60,18 @@ finish() {
 }
 trap finish EXIT
 
+# The journal window below starts 60 s before inject. On a freshly booted host (a CI
+# runner, a just-started WSL distro) that window would take in boot-time logs, which
+# name the job or replay a previous distro's kernel messages. Wait until systemd
+# (PID 1) has been up long enough that boot falls outside the window.
+min_age=${SICKBAY_MIN_BOOT_AGE:-130}
+while :; do
+    age=$(ps -o etimes= -p 1 | tr -d ' ')
+    [ "$age" -ge "$min_age" ] && break
+    echo "waiting for PID 1 to be ${min_age}s old (now ${age}s)" >&2
+    sleep 5
+done
+
 start=$(date +%s)
 # inject.sh exits 10 when it refuses to start (something already exists): it changed nothing,
 # so running cleanup.sh here could delete someone else's files. Any other outcome cleans up.
