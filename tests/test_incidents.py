@@ -24,9 +24,10 @@ from sickbay.snapshot import Snapshot
 
 REPO = Path(__file__).resolve().parent.parent
 MAX_REPO_PATH = 200
-# Real systemd hosts ship units named like "initrd-cleanup.service", so the bare word
-# "cleanup" cannot be banned; the script's file name can.
-TOOLING_WORDS = ("inject", "cleanup.sh", "incidents/")
+# Real hosts use both bare words: systemd ships units like "initrd-cleanup.service" and
+# the kernel runs "idle_inject/N" threads (seen on the GitHub Azure kernel). So the
+# scripts' file names are banned, not the bare words.
+TOOLING_WORDS = ("inject.sh", "cleanup.sh", "incidents/")
 _IPV4 = re.compile(rb"(?<![\w.-])(\d{1,3}(?:\.\d{1,3}){3})(?![\w-])(?!\.\w)")
 _IPV6 = re.compile(rb"(?<![\w:.-])((?:[0-9A-Fa-f]{0,4}:){2,7}[0-9A-Fa-f]{0,4})(?![\w:-])(?!\.\w)")
 
