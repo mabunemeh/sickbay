@@ -1,0 +1,53 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sickbay"
+version = "0.1.0.dev0"
+description = "Capture frozen evidence snapshots of sick Linux hosts, for offline diagnosis benchmarks"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+authors = [
+    { name = "Mohammad AbuNemeh", email = "mabunemeh@gmail.com" },
+]
+dependencies = [
+    "pyyaml>=6",
+]
+
+[project.optional-dependencies]
+dev = [
+    "mypy",
+    "pre-commit",
+    "pytest",
+    "pytest-cov",
+    "ruff",
+    "types-PyYAML",
+]
+
+[project.scripts]
+sickbay = "sickbay.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sickbay"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/fakes.py" = ["E501"]  # long fixture byte strings
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["tests"]
+addopts = "--cov=sickbay --cov-report=term-missing"
+
+[tool.mypy]
+python_version = "3.11"
+files = ["src"]
+strict = true
