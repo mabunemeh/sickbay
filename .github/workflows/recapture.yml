@@ -44,7 +44,7 @@ jobs:
           SNAP: ${{ runner.temp }}/snap/${{ matrix.incident }}
           WORDS: ${{ matrix.incident }}
         run: |
-          WORDS="$WORDS $(id -un) $(hostname)" python - <<'EOF'
+          WORDS="$WORDS inject cleanup.sh incidents/ $(id -un) $(hostname)" python - <<'EOF'
           import json, os, pathlib
           snap = pathlib.Path(os.environ["SNAP"])
           words = [w.lower() for w in os.environ["WORDS"].split()]
@@ -64,6 +64,9 @@ jobs:
                   for w in words:
                       if w.encode() in b:
                           print("file:", p.relative_to(snap), "contains", w)
+                          for ln in b.splitlines():
+                              if w.encode() in ln:
+                                  print("   ", ln[:200].decode(errors="replace"))
           EOF
 
       - name: Cleanup
