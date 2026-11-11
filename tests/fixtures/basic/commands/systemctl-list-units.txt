@@ -1,0 +1,5 @@
+-.slice loaded active active Root Slice
+ledger\x2dapi.service loaded active running Ledger API
+batch.slice loaded active active Batch Slice
+cron.timer loaded active waiting Cron
+ghost.service not-found inactive dead ghost.service

@@ -1,0 +1,2 @@
+{"MESSAGE":"started é ok","SYSLOG_IDENTIFIER":"systemd","__REALTIME_TIMESTAMP":"1700000000000000"}
+{"MESSAGE":"ledger-api: connect from 192.0.2.2 failed","SYSLOG_IDENTIFIER":"ledger-api","_HOSTNAME":"host","__REALTIME_TIMESTAMP":"1700000002000000"}

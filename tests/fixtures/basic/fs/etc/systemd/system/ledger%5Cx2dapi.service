@@ -1,0 +1,5 @@
+[Service]
+Environment=API_KEY=<redacted> MODE=<redacted>
+Environment="MSG=<redacted>"
+ExecStart=/srv/ledger/app.py
+LimitNOFILE=512
