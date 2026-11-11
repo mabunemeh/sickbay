@@ -1,0 +1,5 @@
+0 -> /dev/tty1
+1 -> /dev/tty1
+2 -> /dev/tty1
+3 -> /run/credentials/getty@tty1.service
+5 -> anon_inode:inotify

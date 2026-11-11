@@ -1,0 +1,26 @@
+Filesystem       Inodes   IUsed    IFree IUse% Mounted on
+none            1996531       6  1996525    1% /usr/lib/modules/6.18.54.1-microsoft-standard-WSL2
+/dev/sdb           2256    2241       15  100% /usr/lib/linux-tools/6.18.54.1-microsoft-standard-WSL2
+none            1996531       2  1996529    1% /mnt/wsl
+drivers             999 -999001  1000000     - /usr/lib/wsl/drivers
+/dev/sdd       67108864  674344 66434520    2% /
+none            1996531      23  1996508    1% /mnt/wslg
+none            1996531       5  1996526    1% /usr/lib/wsl/lib
+rootfs          1995249      12  1995237    1% /init
+none            1996531     607  1995924    1% /run
+none            1996531       2  1996529    1% /run/lock
+none            1996531       1  1996530    1% /run/shm
+none            1996531      62  1996469    1% /mnt/wslg/versions.txt
+none            1996531      62  1996469    1% /mnt/wslg/doc
+C:\                 999 -999001  1000000     - /mnt/c
+D:\                 999 -999001  1000000     - /mnt/d
+tmpfs           1048576    2451  1046125    1% /tmp
+none               1024       1     1023    1% /run/credentials/systemd-journald.service
+none               1024       1     1023    1% /run/credentials/systemd-resolved.service
+snapfuse             29      29        0  100% /snap/bare/5
+snapfuse          14329   14329        0  100% /snap/core22/864
+snapfuse          76208   76208        0  100% /snap/gtk-common-themes/1535
+snapfuse            658     658        0  100% /snap/snapd/20290
+snapfuse           8605    8605        0  100% /snap/ubuntu-desktop-installer/1276
+none               1024       1     1023    1% /run/credentials/getty@tty1.service
+tmpfs            399306      46   399260    1% /run/user/1000

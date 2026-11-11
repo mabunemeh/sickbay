@@ -1,0 +1,5 @@
+0 -> /dev/null
+1 -> pipe:[44460]
+2 -> /dev/null
+11 -> /dev/tty
+18 -> pipe:[44456]

@@ -1,0 +1,9 @@
+0 -> /dev/null
+1 -> /dev/null
+2 -> /dev/kmsg
+3 -> /dev/kmsg
+4 -> /dev/hvc1
+5 -> /
+6 -> anon_inode:[eventpoll]
+7 -> socket:[27140]
+8 -> socket:[27141]

@@ -1,0 +1,26 @@
+Filesystem     1024-blocks      Used Available Capacity Mounted on
+none               7986124         0   7986124       0% /usr/lib/modules/6.18.54.1-microsoft-standard-WSL2
+/dev/sdb             98720     98720         0     100% /usr/lib/linux-tools/6.18.54.1-microsoft-standard-WSL2
+none               7986124         4   7986120       1% /mnt/wsl
+drivers          975748092 619149380 356598712      64% /usr/lib/wsl/drivers
+/dev/sdd        1055762868  45594700 956464696       5% /
+none               7986124        40   7986084       1% /mnt/wslg
+none               7986124         0   7986124       0% /usr/lib/wsl/lib
+rootfs             7980996      3396   7977600       1% /init
+none               7986124       868   7985256       1% /run
+none               7986124         0   7986124       0% /run/lock
+none               7986124         0   7986124       0% /run/shm
+none               7986124        92   7986032       1% /mnt/wslg/versions.txt
+none               7986124        92   7986032       1% /mnt/wslg/doc
+C:\              975748092 619149380 356598712      64% /mnt/c
+D:\              976759804 678227376 298532428      70% /mnt/d
+tmpfs              7986124      4248   7981876       1% /tmp
+none                  1024         0      1024       0% /run/credentials/systemd-journald.service
+none                  1024         0      1024       0% /run/credentials/systemd-resolved.service
+snapfuse               128       128         0     100% /snap/bare/5
+snapfuse             75776     75776         0     100% /snap/core22/864
+snapfuse             93952     93952         0     100% /snap/gtk-common-themes/1535
+snapfuse             41856     41856         0     100% /snap/snapd/20290
+snapfuse            134272    134272         0     100% /snap/ubuntu-desktop-installer/1276
+none                  1024         0      1024       0% /run/credentials/getty@tty1.service
+tmpfs              1597224        16   1597208       1% /run/user/1000

@@ -1,0 +1,24 @@
+label_schema: 0
+status: "draft - awaiting review by Mohammad"
+id: fd-exhaustion
+title: "A service has used up its open-file limit and cannot open any more files"
+root_cause_category: fd_limit
+component: ledger-api.service
+summary: "ledger-api.service has LimitNOFILE=512 and holds 512 open file descriptors, so every further open() fails with EMFILE."
+evidence:
+  - source: "file:/proc/*/limits"
+    contains: "Max open files            512                  512"
+  - source: "command:systemctl-show"
+    contains: "LimitNOFILE=512"
+  - source: "file:/proc/*/fd"
+    contains: "/run/ledger-spool/"
+  - source: "journal"
+    contains: "[Errno 24] Too many open files"
+fix: "Find out why the service never closes its spool files (a descriptor leak), fix it, and raise LimitNOFILE for the unit with a drop-in plus a restart if the working set really needs more than 512."
+leak_strings:
+  - EMFILE
+  - descriptor leak
+names:
+  - ledger-api
+  - ledger-svc
+  - ledger-spool

@@ -1,0 +1,11 @@
+0 -> /dev/pts/1
+1 -> /dev/pts/1
+2 -> /dev/pts/1
+10 -> /dev/pts/1
+11 -> /tmp/gitstatus.POWERLEVEL9K.1000.562.1794423447.1.fifo (deleted)
+12 -> /usr/share/zsh/functions/Completion.zwc
+13 -> pipe:[44460]
+14 -> /usr/share/zsh/functions/Completion/Base.zwc
+15 -> /tmp/p10k.worker.1000.562.1794423448.fifo (deleted)
+16 -> /usr/share/zsh/functions/Misc.zwc
+18 -> pipe:[44456]

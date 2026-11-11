@@ -1,0 +1,9 @@
+0 -> /dev/null
+1 -> socket:[46248]
+2 -> socket:[46248]
+3 -> anon_inode:[eventfd]
+4 -> anon_inode:[eventfd]
+6 -> pipe:[46250]
+7 -> socket:[46258]
+95 -> socket:[43345]
+100 -> socket:[43347]

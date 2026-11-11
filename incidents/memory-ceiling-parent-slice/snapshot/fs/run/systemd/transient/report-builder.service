@@ -1,0 +1,9 @@
+# This is a transient unit file, created programmatically via the systemd API. Do not edit.
+[Unit]
+Description=Report builder
+
+[Service]
+Restart=no
+Slice=batch.slice
+ExecStart=
+ExecStart="/usr/bin/python3" "/run/report-svc/build.py"

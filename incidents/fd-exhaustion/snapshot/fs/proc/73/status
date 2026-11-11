@@ -1,0 +1,59 @@
+Name:	systemd-resolve
+Umask:	0022
+State:	S (sleeping)
+Tgid:	73
+Ngid:	0
+Pid:	73
+PPid:	1
+TracerPid:	0
+Uid:	101	101	101	101
+Gid:	103	103	103	103
+FDSize:	128
+Groups:	103 
+NStgid:	73
+NSpid:	73
+NSpgid:	73
+NSsid:	73
+Kthread:	0
+VmPeak:	   22448 kB
+VmSize:	   22448 kB
+VmLck:	       0 kB
+VmPin:	       0 kB
+VmHWM:	   14540 kB
+VmRSS:	   14540 kB
+RssAnon:	    2488 kB
+RssFile:	   12052 kB
+RssShmem:	       0 kB
+VmData:	    1956 kB
+VmStk:	     132 kB
+VmExe:	     344 kB
+VmLib:	   11504 kB
+VmPTE:	      88 kB
+VmSwap:	       0 kB
+HugetlbPages:	       0 kB
+CoreDumping:	0
+THP_enabled:	1
+untag_mask:	0xffffffffffffffff
+Threads:	1
+SigQ:	0/62353
+SigPnd:	0000000000000000
+ShdPnd:	0000000000000000
+SigBlk:	0008000400004a03
+SigIgn:	0000000000001000
+SigCgt:	0000000000000000
+CapInh:	0000000000002500
+CapPrm:	0000000000002500
+CapEff:	0000000000002500
+CapBnd:	0000000000002500
+CapAmb:	0000000000002500
+NoNewPrivs:	1
+Seccomp:	2
+Seccomp_filters:	28
+Speculation_Store_Bypass:	thread vulnerable
+SpeculationIndirectBranch:	conditional enabled
+Cpus_allowed:	ffff
+Cpus_allowed_list:	0-15
+Mems_allowed:	00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000001
+Mems_allowed_list:	0
+voluntary_ctxt_switches:	61
+nonvoluntary_ctxt_switches:	4

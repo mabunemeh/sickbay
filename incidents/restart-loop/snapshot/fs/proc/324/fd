@@ -1,0 +1,11 @@
+0 -> /dev/null
+1 -> socket:[27371]
+2 -> socket:[27371]
+3 -> /var/log/unattended-upgrades/unattended-upgrades-shutdown.log
+4 -> socket:[44321]
+5 -> anon_inode:[eventfd]
+6 -> /usr/lib/x86_64-linux-gnu/libffi.so.8.2.0
+7 -> anon_inode:[eventfd]
+8 -> /run/systemd/inhibit/1.ref
+9 -> socket:[44322]
+10 -> socket:[44323]

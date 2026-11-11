@@ -1,0 +1,6 @@
+[Unit]
+Description=Batch workloads
+
+[Slice]
+MemoryMax=64M
+MemorySwapMax=0

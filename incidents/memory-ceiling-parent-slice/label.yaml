@@ -1,0 +1,24 @@
+label_schema: 0
+status: "draft - awaiting review by Mohammad"
+id: memory-ceiling-parent-slice
+title: "A service was killed for memory although it has no limit and the host has plenty free"
+root_cause_category: memory_limit
+component: batch.slice
+summary: "report-builder.service has no memory limit of its own, but its parent batch.slice has MemoryMax=64M (swap 0), so the kernel killed it when it grew past the slice ceiling."
+evidence:
+  - source: "command:systemctl-show"
+    contains: "Result=oom-kill"
+  - source: "file:/run/systemd/system/batch.slice"
+    contains: "MemoryMax=64M"
+  - source: "file:/sys/fs/cgroup/batch.slice/memory.max"
+    contains: "67108864"
+  - source: "journal"
+    contains: "report-builder.service: Failed with result 'oom-kill'."
+fix: "Raise MemoryMax on batch.slice (or remove it) so the workload fits, or reduce what report-builder.service holds in memory; check ancestor slices, not only the unit, when a unit is killed with free memory on the host."
+leak_strings:
+  - parent slice
+  - ancestor
+names:
+  - report-builder
+  - report-svc
+  - batch.slice

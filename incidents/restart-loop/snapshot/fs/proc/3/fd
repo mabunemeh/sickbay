@@ -1,0 +1,6 @@
+0 -> /dev/null
+1 -> /dev/null
+2 -> /dev/kmsg
+3 -> /dev/kmsg
+4 -> /dev/hvc1
+5 -> anon_inode:[pidfd]

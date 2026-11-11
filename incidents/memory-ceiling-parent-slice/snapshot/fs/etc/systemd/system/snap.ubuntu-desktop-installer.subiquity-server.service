@@ -1,0 +1,19 @@
+[Unit]
+# Auto-generated, DO NOT EDIT
+Description=Service for snap application ubuntu-desktop-installer.subiquity-server
+Requires=snap-ubuntu\x2ddesktop\x2dinstaller-1276.mount
+Wants=network.target
+After=snap-ubuntu\x2ddesktop\x2dinstaller-1276.mount network.target snapd.apparmor.service
+X-Snappy=yes
+
+[Service]
+EnvironmentFile=-/etc/environment
+ExecStart=/usr/bin/snap run ubuntu-desktop-installer.subiquity-server
+SyslogIdentifier=ubuntu-desktop-installer.subiquity-server
+Restart=always
+WorkingDirectory=/var/snap/ubuntu-desktop-installer/1276
+TimeoutStopSec=30s
+Type=simple
+
+[Install]
+WantedBy=multi-user.target

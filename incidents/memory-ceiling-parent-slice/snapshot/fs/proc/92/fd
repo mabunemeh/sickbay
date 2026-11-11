@@ -1,0 +1,17 @@
+0 -> /dev/null
+1 -> socket:[28420]
+2 -> socket:[28420]
+3 -> socket:[43368]
+4 -> socket:[43369]
+5 -> socket:[43367]
+6 -> socket:[28426]
+7 -> anon_inode:[eventpoll]
+8 -> anon_inode:[signalfd]
+9 -> anon_inode:[signalfd]
+10 -> anon_inode:[signalfd]
+11 -> /sys/fs/cgroup/system.slice/systemd-udevd.service/memory.pressure
+12 -> anon_inode:[timerfd]
+13 -> anon_inode:inotify
+14 -> socket:[28431]
+15 -> /usr/lib/udev/hwdb.bin
+19 -> anon_inode:[timerfd]

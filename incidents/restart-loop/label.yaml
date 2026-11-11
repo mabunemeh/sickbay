@@ -1,0 +1,20 @@
+label_schema: 0
+status: "draft - awaiting review by Mohammad"
+id: restart-loop
+title: "A service exits immediately and systemd keeps restarting it"
+root_cause_category: crash_loop
+component: quote-sync.service
+summary: "quote-sync.service exits with status 1 every start because its settings file /run/quote-sync/sync.conf does not exist, and Restart=always with no start limit keeps relaunching it."
+evidence:
+  - source: "journal"
+    contains: "quote-sync.service: Main process exited, code=exited, status=1/FAILURE"
+  - source: "journal"
+    contains: "[Errno 2] No such file or directory: '/run/quote-sync/sync.conf'"
+  - source: "journal"
+    contains: "quote-sync.service: Scheduled restart job, restart counter is at"
+fix: "Create the missing settings file (or point the service at the right path) and restart it; consider StartLimitIntervalSec/StartLimitBurst so a broken service stops instead of looping forever."
+leak_strings:
+  - crash loop
+  - restart loop
+names:
+  - quote-sync

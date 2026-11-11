@@ -1,0 +1,29 @@
+      1       0 root     Ss   16420  25124    1     300 /sbin/init
+      3       2 root     S+    2136   3664    1     300 init-watcher
+      8       2 root     Sl+   2276   3804    2     300 plan9 --control-socket 7 --log-level 4 --server-fd 8 --pipe-fd 10 --log-truncate
+     51       1 root     S<s  18476  42472    1     299 /usr/lib/systemd/systemd-journald
+     73       1 systemd+ Ss   14540  22448    1     299 /usr/lib/systemd/systemd-resolved
+     92       1 root     Ss   12724  35420    1     299 /usr/lib/systemd/systemd-udevd
+    212       1 root     Ssl   1872 159216    3     298 snapfuse /var/lib/snapd/snaps/bare_5.snap /snap/bare/5 -o ro,nodev,allow_other,suid
+    213       1 root     Ssl   7524 306680    5     298 snapfuse /var/lib/snapd/snaps/core22_864.snap /snap/core22/864 -o ro,nodev,allow_other,suid
+    220       1 root     Ssl   1752 159348    3     298 snapfuse /var/lib/snapd/snaps/gtk-common-themes_1535.snap /snap/gtk-common-themes/1535 -o ro,nodev,allow_other,suid
+    226       1 root     Ssl   1968 233080    4     298 snapfuse /var/lib/snapd/snaps/snapd_20290.snap /snap/snapd/20290 -o ro,nodev,allow_other,suid
+    230       1 root     Ssl   7480 232948    4     298 snapfuse /var/lib/snapd/snaps/ubuntu-desktop-installer_1276.snap /snap/ubuntu-desktop-installer/1276 -o ro,nodev,allow_other,suid
+    256       1 root     Ss    3228   4472    1     298 /usr/sbin/cron -f -P
+    257       1 message+ Ss    5440   8800    1     298 @dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+    264       1 root     Ssl  47360 2333580  15     298 /usr/lib/snapd/snapd
+    266       1 root     Ss    9600  18408    1     298 /usr/lib/systemd/systemd-logind
+    272       1 root     Ssl  13508 1792300   8     298 /usr/libexec/wsl-pro-service
+    303       1 syslog   Ssl   5780 220552    4     298 /usr/sbin/rsyslogd -n -iNONE
+    309       1 root     Ss+   2892   5492    1     298 /usr/sbin/agetty --noreset --noclear --issue-file=/etc/issue:/etc/issue.d:/run/issue.d:/usr/lib/issue.d - linux
+    313       1 root     Ssl  41960 2266576  14     298 /usr/bin/containerd
+    324       1 root     Ssl  32668 123484    2     298 /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
+    436       2 root     Ss    5620   8648    1     298 login -- user1000
+    514       1 user1000 Ss   13740  22436    1     298 /usr/lib/systemd/systemd --user
+    518     514 user1000 S     4064  22944    1     298 (sd-pam)
+    562     436 user1000 Ss+   9948  11284    1     298 -zsh
+    670       1 user1000 S     5364   9400    1     297 -zsh
+    682       1 user1000 S     6384  10748    1     297 -zsh
+    684       1 user1000 S     6044  10732    1     297 -zsh
+    685     670 user1000 Sl    1840   6828   33     297 /home/user1000/.cache/gitstatus/gitstatusd-linux-x86_64 -G v1.5.4 -s -1 -u -1 -d -1 -c -1 -m -1 -v FATAL -t 32
+   1129     434 user1000 S+    7776  17800    1       1 tail -3

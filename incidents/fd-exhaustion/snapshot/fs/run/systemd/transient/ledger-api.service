@@ -1,0 +1,10 @@
+# This is a transient unit file, created programmatically via the systemd API. Do not edit.
+[Unit]
+Description=Ledger API worker
+
+[Service]
+LimitNOFILE=512
+LimitNOFILE=512
+Restart=no
+ExecStart=
+ExecStart="/usr/bin/python3" "/run/ledger-svc/serve.py"

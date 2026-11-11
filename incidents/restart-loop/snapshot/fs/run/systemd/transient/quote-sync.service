@@ -1,0 +1,14 @@
+# This is a transient unit file, created programmatically via the systemd API. Do not edit.
+[Unit]
+Description=Quote sync
+
+[Service]
+Restart=always
+RestartSec=2s
+
+[Unit]
+StartLimitIntervalSec=0
+
+[Service]
+ExecStart=
+ExecStart="/usr/bin/python3" "/run/quote-sync/sync.py"
