@@ -1,1 +1,3 @@
 Filesystem 1024-blocks Used Available Capacity Mounted on
+/dev/sda1 1000000 900000 100000 90% /
+tmpfs 2048 0 2048 0% /run/spool area

@@ -110,7 +110,11 @@ def build_source() -> FakeSource:
         "/proc/102/cmdline": b"child\x00",
         "/proc/2/cmdline": b"",
         "/proc/200/cmdline": b"/usr/bin/python3\x00/srv/ledger/app.py\x00--owner=alice\x00",
-        "/proc/200/limits": b"Max open files            512                  512                  files\n",
+        "/proc/200/limits": (
+            b"Limit                     Soft Limit           Hard Limit           Units     \n"
+            b"Max processes             63366                63366                processes \n"
+            b"Max open files            512                  512                  files     \n"
+        ),
         "/proc/200/status": b"Name:\tpython3\nUid:\t1000\t1000\t1000\t1000\n",
         "/proc/200/cgroup": b"0::/system.slice/ledger\\x2dapi.service\n",
         "/proc/200/oom_score": b"666\n",
@@ -119,6 +123,10 @@ def build_source() -> FakeSource:
         "/sys/fs/cgroup/cgroup.procs": b"1\n101\n200\n",
         f"/sys/fs/cgroup/system.slice/{UNIT}/memory.max": b"max\n",
         f"/sys/fs/cgroup/system.slice/{UNIT}/pids.current": b"3\n",
+        f"/sys/fs/cgroup/system.slice/{UNIT}/memory.current": b"52428800\n",
+        f"/sys/fs/cgroup/system.slice/{UNIT}/cgroup.procs": b"200\n",
+        "/sys/fs/cgroup/batch.slice/memory.max": b"67108864\n",
+        "/sys/fs/cgroup/batch.slice/memory.events": b"low 0\nhigh 0\nmax 4\noom 1\noom_kill 1\n",
         f"/etc/systemd/system/{UNIT}": (
             b'[Service]\nEnvironment=API_KEY=s3cret MODE=prod\nEnvironment="MSG=a b"\n'
             b"ExecStart=/srv/ledger/app.py\nLimitNOFILE=512\n"
@@ -160,8 +168,18 @@ def build_source() -> FakeSource:
             b'tcp LISTEN 0 128 10.20.30.40:8080 0.0.0.0:* users:(("python3",pid=200,fd=3))\n'
             b"tcp LISTEN 0 128 127.0.0.53%lo:53 0.0.0.0:*\n",
         ),
-        ("df", "-P"): RunResult(0, b"Filesystem 1024-blocks Used Available Capacity Mounted on\n"),
-        ("df", "-iP"): RunResult(0, b"Filesystem Inodes IUsed IFree IUse% Mounted on\n"),
+        ("df", "-P"): RunResult(
+            0,
+            b"Filesystem 1024-blocks Used Available Capacity Mounted on\n"
+            b"/dev/sda1 1000000 900000 100000 90% /\n"
+            b"tmpfs 2048 0 2048 0% /run/spool area\n",
+        ),
+        ("df", "-iP"): RunResult(
+            0,
+            b"Filesystem Inodes IUsed IFree IUse% Mounted on\n"
+            b"/dev/sda1 65536 65536 0 100% /\n"
+            b"tmpfs 4096 1 4095 1% /run/spool area\n",
+        ),
         ("free", "-b"): RunResult(0, b"              total        used\nMem:    16000000000\n"),
         ("ps", "-eo", "pid,ppid,user,stat,rss,vsz,nlwp,etimes,args", "--no-headers"): RunResult(
             0, ps.encode()
@@ -176,7 +194,10 @@ def build_source() -> FakeSource:
                         _BOOT_ID="b00t",
                         _HOSTNAME="buildhost",
                         MESSAGE="ledger-api: connect from 10.20.30.99 failed",
+                        PRIORITY="3",
                         SYSLOG_IDENTIFIER="ledger-api",
+                        _PID="200",
+                        _SYSTEMD_UNIT=UNIT,
                     ),
                     journal_line(
                         __REALTIME_TIMESTAMP="1700000001000000",
@@ -186,7 +207,11 @@ def build_source() -> FakeSource:
                     journal_line(
                         __REALTIME_TIMESTAMP="1700000000000000",
                         MESSAGE="started é ok",
+                        PRIORITY="6",
                         SYSLOG_IDENTIFIER="systemd",
+                        UNIT=UNIT,
+                        _PID="1",
+                        _SYSTEMD_UNIT="init.scope",
                     ),
                 ]
             )

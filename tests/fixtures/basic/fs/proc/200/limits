@@ -1,1 +1,3 @@
-Max open files            512                  512                  files
+Limit                     Soft Limit           Hard Limit           Units     
+Max processes             63366                63366                processes 
+Max open files            512                  512                  files     

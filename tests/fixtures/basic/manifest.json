@@ -9,8 +9,8 @@
       "disk": "commands/df.txt",
       "exit_code": 0,
       "id": "df",
-      "sha256": "7010847856b36f48034d9ad0817ca8588e37010b03c4847a601f32dedee6b74f",
-      "size": 58
+      "sha256": "0cf85d9fb76fc20b551cfd5791472c6a6c93bc19d37e568c74fabeee4c3a29b4",
+      "size": 133
     },
     {
       "argv": [
@@ -20,8 +20,8 @@
       "disk": "commands/df-i.txt",
       "exit_code": 0,
       "id": "df-i",
-      "sha256": "fcf008e209fc2d81b58902a40be52326fd4bade2d77a5aa908c47ebcc3fb8cdf",
-      "size": 47
+      "sha256": "24dc112749660d279b76f67d745f69cae473faf690066118e78737dc807cb1e3",
+      "size": 115
     },
     {
       "argv": [
@@ -177,8 +177,8 @@
     {
       "disk": "fs/proc/200/limits",
       "path": "/proc/200/limits",
-      "sha256": "0637492bcf78f8ba5da63c0853893e46dd117e41baabc95fa12531f78847b390",
-      "size": 74
+      "sha256": "3b43c6339759fe25039d612ebfd1eb643064f87a65179d3e59c8e4c41f90e761",
+      "size": 237
     },
     {
       "disk": "fs/proc/200/oom_score",
@@ -217,6 +217,18 @@
       "size": 22
     },
     {
+      "disk": "fs/sys/fs/cgroup/batch.slice/memory.events",
+      "path": "/sys/fs/cgroup/batch.slice/memory.events",
+      "sha256": "026e64b08a59ac8f1bb153ac86cb7486dcda96eb291158b70eccd65cc2d02b14",
+      "size": 36
+    },
+    {
+      "disk": "fs/sys/fs/cgroup/batch.slice/memory.max",
+      "path": "/sys/fs/cgroup/batch.slice/memory.max",
+      "sha256": "dbf49ee47089a80aa52cdee996311cf2aa9e70c5725925da0f83a35d14e2efb1",
+      "size": 9
+    },
+    {
       "disk": "fs/sys/fs/cgroup/cgroup.controllers",
       "path": "/sys/fs/cgroup/cgroup.controllers",
       "sha256": "4e91842959764a4d484c9947707e72307dc8f55919189a7ec296252ec5dde9ad",
@@ -227,6 +239,18 @@
       "path": "/sys/fs/cgroup/cgroup.procs",
       "sha256": "a13df39990f3de27f2736d779582981c238f52efbf1ace5c0a35639b84dbf4dd",
       "size": 6
+    },
+    {
+      "disk": "fs/sys/fs/cgroup/system.slice/ledger%5Cx2dapi.service/cgroup.procs",
+      "path": "/sys/fs/cgroup/system.slice/ledger\\x2dapi.service/cgroup.procs",
+      "sha256": "c11e3f4837efde2441e23a7b9da02131f53bf59fddeb7147c4ab81afe400460f",
+      "size": 4
+    },
+    {
+      "disk": "fs/sys/fs/cgroup/system.slice/ledger%5Cx2dapi.service/memory.current",
+      "path": "/sys/fs/cgroup/system.slice/ledger\\x2dapi.service/memory.current",
+      "sha256": "9c3ae54309ebe317b33ec8fa6a0cec3c0453640ba9e8747d582a8902a0654bc3",
+      "size": 9
     },
     {
       "disk": "fs/sys/fs/cgroup/system.slice/ledger%5Cx2dapi.service/memory.max",
@@ -250,7 +274,7 @@
   "journal": {
     "disk": "journal.jsonl",
     "entries": 2,
-    "sha256": "2a7646e7a59a10d7afe89eb0bfc1e545c19a104ee642f880fc8bff92e3a1a8a3",
+    "sha256": "d89f6654c9b2504a6ee7d89c389e3b3a30acfbc09d6b9d3a5d84644f2dcf2738",
     "since": "-1h"
   },
   "scrub_counts": {

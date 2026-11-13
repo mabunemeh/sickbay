@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from sickbay.snapshot.hostview import UnknownCommandError
+
 COMMAND_TIMEOUT = 20.0
 JOURNAL_TIMEOUT = 60.0
 COMMAND_ENV = {"LC_ALL": "C", "SYSTEMD_PAGER": "", "SYSTEMD_COLORS": "0"}
@@ -72,7 +74,7 @@ def static_argv(command_id: str) -> tuple[str, ...]:
     for cid, argv in STATIC_COMMANDS:
         if cid == command_id:
             return argv
-    raise KeyError(command_id)
+    raise UnknownCommandError(command_id)
 
 
 def loaded_units(list_units_stdout: bytes) -> list[str]:

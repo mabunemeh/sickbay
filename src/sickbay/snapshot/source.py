@@ -9,7 +9,7 @@ import socket
 import subprocess
 from collections.abc import Iterator
 from dataclasses import dataclass
-from typing import Any, Literal, Protocol
+from typing import Any, Protocol
 
 from sickbay.snapshot.commands import (
     COMMAND_ENV,
@@ -21,9 +21,7 @@ from sickbay.snapshot.commands import (
     show_argv,
     static_argv,
 )
-from sickbay.snapshot.hostview import CommandResult, HostView
-
-Kind = Literal["file", "dir", "symlink", "other"]
+from sickbay.snapshot.hostview import CommandResult, HostView, Kind
 
 
 @dataclass(frozen=True)
