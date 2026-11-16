@@ -3,6 +3,11 @@ name: Recapture
 # Re-injects each incident on a real systemd runner and checks that the evidence
 # tests still hold against the fresh capture. The committed snapshots stay the
 # benchmark input; this job only detects drift.
+#
+# The matrix value is an opaque slot number, never the incident id: the runner's
+# hosted-compute-agent.service journals the job's orchestration id (which ends in
+# the matrix value) and display name while the job runs, so an id in the matrix
+# lands in the captured journal and fails the leak test.
 
 on:
   schedule:
@@ -15,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        incident: [fd-exhaustion, memory-ceiling-parent-slice, restart-loop]
+        slot: [0, 1, 2]
     steps:
       - uses: actions/checkout@v7
 
@@ -26,10 +31,19 @@ jobs:
       - name: Install
         run: pip install -e ".[dev]"
 
+      - name: Pick incident
+        run: |
+          mapfile -t ids < <(find incidents -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | LC_ALL=C sort)
+          if [ "${#ids[@]}" -ne 3 ]; then
+            echo "::error::${#ids[@]} incidents but 3 matrix slots; update matrix.slot"
+            exit 1
+          fi
+          echo "INCIDENT=${ids[${{ matrix.slot }}]}" >> "$GITHUB_ENV"
+
       - name: Inject and capture
         run: |
           SICKBAY_BIN="$(command -v sickbay)" scripts/reproduce.sh \
-            "${{ matrix.incident }}" "$RUNNER_TEMP/snap/${{ matrix.incident }}"
+            "$INCIDENT" "$RUNNER_TEMP/snap/$INCIDENT" 2> >(tee "$RUNNER_TEMP/reproduce.err" >&2)
 
       - name: Evidence tests against the fresh capture
         env:
@@ -38,37 +52,52 @@ jobs:
           SICKBAY_REAL_USER="$(id -un)" SICKBAY_REAL_HOST="$(hostname)" \
             pytest tests/test_incidents.py --no-cov
 
-      - name: Show where leak strings occur (on failure)
-        if: failure()
-        env:
-          SNAP: ${{ runner.temp }}/snap/${{ matrix.incident }}
-          WORDS: ${{ matrix.incident }}
+      - name: Leak report (every banned word, and runner-agent entries in the window)
+        if: always()
         run: |
-          WORDS="$WORDS inject cleanup.sh incidents/ $(id -un) $(hostname)" python - <<'EOF'
-          import json, os, pathlib
-          snap = pathlib.Path(os.environ["SNAP"])
-          words = [w.lower() for w in os.environ["WORDS"].split()]
+          REAL_USER="$(id -un)" REAL_HOST="$(hostname)" python - <<'EOF'
+          import json, os, pathlib, re, yaml
+          inc = os.environ["INCIDENT"]
+          snap = pathlib.Path(os.environ["RUNNER_TEMP"]) / "snap" / inc
+          if not (snap / "journal.jsonl").is_file():
+              raise SystemExit("no capture to report on")
+          label = yaml.safe_load(pathlib.Path(f"incidents/{inc}/label.yaml").read_text())
+          words = [inc, label["root_cause_category"], *label["leak_strings"],
+                   "inject.sh", "cleanup.sh", "incidents/", "sickbay",
+                   os.environ["REAL_USER"], os.environ["REAL_HOST"]]
+          words = [str(w).lower() for w in words]
+          err = (pathlib.Path(os.environ["RUNNER_TEMP"]) / "reproduce.err").read_text()
+          m = re.search(r"inject started at epoch (\d+)", err)
+          start_us = int(m.group(1)) * 1_000_000 if m else None
+          agent = hits = 0
           for line in (snap / "journal.jsonl").read_text(errors="replace").splitlines():
               e = json.loads(line)
+              unit = e.get("_SYSTEMD_UNIT", "")
+              ts = int(e.get("__REALTIME_TIMESTAMP", "0"))
+              rel = f"{(ts - start_us) / 1e6:+.1f}s" if start_us else "?"
+              if unit == "hosted-compute-agent.service":
+                  agent += 1
               for k, v in e.items():
-                  s = str(v).lower()
-                  for w in words:
-                      i = s.find(w)
-                      if i >= 0:
-                          print(w, "|", e.get("syslog_identifier") or e.get("SYSLOG_IDENTIFIER"),
-                                "|", e.get("_systemd_unit") or e.get("_SYSTEMD_UNIT"), "|", k,
-                                "|", s[max(0, i - 80):i + 80])
-          for p in snap.rglob("*"):
-              if p.is_file() and p.name != "journal.jsonl":
+                  if not k.startswith("__"):
+                      s = str(v).lower()
+                      for w in words:
+                          i = s.find(w)
+                          if i >= 0:
+                              hits += 1
+                              print(f"journal {rel} | {w} | {unit} | {k} | {s[max(0, i - 80):i + 80]}")
+          for p in sorted(snap.rglob("*")):
+              if p.is_file() and p.name not in ("journal.jsonl", "manifest.json"):
                   b = p.read_bytes().lower()
                   for w in words:
-                      if w.encode() in b:
-                          print("file:", p.relative_to(snap), "contains", w)
-                          for ln in b.splitlines():
-                              if w.encode() in ln:
-                                  print("   ", ln[:200].decode(errors="replace"))
+                      for ln in b.splitlines():
+                          if w.encode() in ln:
+                              hits += 1
+                              print(f"file {p.relative_to(snap)} | {w} | {ln[:200].decode(errors='replace')}")
+          print(f"hosted-compute-agent.service entries in the captured journal: {agent}")
+          print(f"banned-word hits: {hits}")
           EOF
 
       - name: Cleanup
         if: always()
-        run: sudo "incidents/${{ matrix.incident }}/cleanup.sh"
+        run: |
+          if [ -n "${INCIDENT:-}" ]; then sudo "incidents/$INCIDENT/cleanup.sh"; fi

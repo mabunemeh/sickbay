@@ -73,6 +73,7 @@ while :; do
 done
 
 start=$(date +%s)
+echo "inject started at epoch $start" >&2
 # inject.sh exits 10 when it refuses to start (something already exists): it changed nothing,
 # so running cleanup.sh here could delete someone else's files. Any other outcome cleans up.
 set +e
