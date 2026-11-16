@@ -413,6 +413,11 @@ def test_read_file_page_never_splits_a_character() -> None:
     assert page(data, 5, 4) == "😀".encode()
 
 
+def test_read_file_page_does_not_move_an_invalid_sequence() -> None:
+    # E0 80 80 is an overlong form: it never decodes, so the cut keeps its bytes.
+    assert page(b"ab\xe0\x80\x80", 0, 4) == b"ab\xe0\x80"
+
+
 def _pages(view: RecordingView, max_bytes: int) -> tuple[bytes, list[str]]:
     raw, texts, offset = b"", [], 0
     data = view.files["/proc/meminfo"]
