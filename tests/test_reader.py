@@ -308,6 +308,16 @@ def test_journal_line_that_is_not_an_object_fails_closed(copy: Path) -> None:
         list(Snapshot.open(copy).journal())
 
 
+def test_read_plain_refuses_dotdot_out_of_the_root(tmp_path: Path) -> None:
+    """The lstat walk accepts '..' (a real directory); only the containment check stops it."""
+    from sickbay.snapshot.reader import read_plain
+
+    (tmp_path / "outside").write_bytes(b"secret")
+    (tmp_path / "snap").mkdir()
+    with pytest.raises(SnapshotError, match="escapes"):
+        read_plain(tmp_path / "snap", "../outside")
+
+
 def _cmd(m: dict[str, Any]) -> dict[str, Any]:
     return next(c for c in m["commands"] if c["id"] == "ps")  # type: ignore[no-any-return]
 
