@@ -57,6 +57,18 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `HostView.kind(path)` (file, dir, symlink or other, without following links);
   `Snapshot` and `LiveSource` implement it. `HostView.command` raises `UnknownCommandError`
   (a `KeyError`) for an unknown command id, and tools report only that as `unavailable`.
+- Label schema 1 (`sickbay.evals.labels`): strict `load_label`, the frozen category enum,
+  `split`, `injection` and `also_accepted`; the three seed labels are migrated (still drafts).
+- Diagnosis schema 1 (`sickbay.evals.diagnosis`): `DIAGNOSIS_JSON_SCHEMA` and
+  `validate_diagnosis`.
+- Eval scorers for category, component and grounding; fix and safety are recorded as
+  not scored.
+- `sickbay eval --baseline keyword [--incidents DIR] [--out PATH]` writes a scored result
+  (`result_schema: 1`) and prints a one-line summary; exit 3 for an unreadable or invalid
+  snapshot or label.
+- `sickbay eval --baseline dump --dry-run --out DIR` writes each incident's dump text; the
+  dump baseline is not scored yet (exit 2 without `--dry-run`).
+- `results/keyword-baseline.json` and `docs/eval-methodology.md`.
 
 ### Changed
 

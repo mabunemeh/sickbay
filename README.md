@@ -5,8 +5,8 @@ it back through the same interface a live host would give.
 
 This is the first piece of a benchmark of sick Linux hosts. Today the repo has
 the snapshot format, `capture`, `verify`, the reader, ten read-only tools over
-snapshots, and three seed incidents (`incidents/`, labels still drafts). Scorers and
-agents are not built yet.
+snapshots, three seed incidents (`incidents/`, labels still drafts), and `sickbay eval`: a
+scored keyword baseline, and a dump baseline built but scored only from batch 4 ([method](docs/eval-methodology.md)).
 Related, different work: SREBattle (live VMs, pass/fail), ITBench-AA and SREGym
 (Kubernetes).
 

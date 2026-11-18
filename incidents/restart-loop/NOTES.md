@@ -21,5 +21,5 @@ fails.
 
 ## Status
 
-`label.yaml` is a DRAFT awaiting review by Mohammad. The label schema is not final
-(`label_schema: 0`). Do not treat the snapshot as a benchmark input until the label is reviewed.
+`label.yaml` is a DRAFT awaiting review by Mohammad (`label_schema: 1`,
+`status: draft`). Do not treat the snapshot as a benchmark input until the label is reviewed.
