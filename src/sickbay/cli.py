@@ -1,8 +1,10 @@
-"""sickbay command line: capture, verify and tool.
+"""sickbay command line: capture, verify, tool and eval.
 
 Exit codes: 0 ok (for `tool`, any tool result, including an error result), 2 usage
-(including a bad or unwritable capture DEST, an unknown tool name, or --args that is not a
-JSON object), 3 input unreadable or failing verification.
+(including a bad or unwritable capture DEST, an unknown tool name, --args that is not a
+JSON object, an unwritable eval --out, and `eval --baseline dump` without --dry-run),
+3 input unreadable or failing verification (for `eval`, any incident's snapshot or label).
+1 (below threshold), 4 and 5 are reserved and unused.
 """
 
 from __future__ import annotations
@@ -14,6 +16,16 @@ from collections.abc import Sequence
 from pathlib import Path
 
 from sickbay import __version__
+from sickbay.evals.baselines.dump import build_dump
+from sickbay.evals.baselines.keyword import KeywordPredictor
+from sickbay.evals.labels import LabelError
+from sickbay.evals.runner import (
+    dev_incidents,
+    dumps_result,
+    open_incident,
+    run_eval,
+    summary_line,
+)
 from sickbay.snapshot import Snapshot, SnapshotError, capture
 from sickbay.snapshot.source import LiveSource
 from sickbay.tools import TOOLS, call_tool, serialize
@@ -52,6 +64,20 @@ def _build_parser() -> argparse.ArgumentParser:
     tool.add_argument("snapshot", type=Path)
     tool.add_argument("name", help=f"tool name: {', '.join(TOOLS)}")
     tool.add_argument("--args", default="{}", help="tool arguments as a JSON object")
+
+    ev = sub.add_parser("eval", help="run a baseline over the incidents and score it")
+    ev.add_argument("--baseline", required=True, choices=["keyword", "dump"])
+    ev.add_argument("--incidents", type=Path, default=Path("incidents"), help="default ./incidents")
+    ev.add_argument(
+        "--out",
+        type=Path,
+        help="keyword: result file (default stdout); dump: directory for the dump texts",
+    )
+    ev.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="dump only: write <incident>.dump.txt files to --out instead of calling a model",
+    )
     return parser
 
 
@@ -114,10 +140,77 @@ def _cmd_tool(args: argparse.Namespace) -> int:
     return EXIT_OK
 
 
+def _note(message: str) -> None:
+    print(f"sickbay: {message}", file=sys.stderr)
+
+
+def _eval_keyword(args: argparse.Namespace) -> int:
+    if args.dry_run:
+        print("sickbay: --dry-run applies to the dump baseline only", file=sys.stderr)
+        return EXIT_USAGE
+    try:
+        result = run_eval(
+            KeywordPredictor(),
+            args.incidents,
+            note=_note,
+        )
+    except (LabelError, SnapshotError) as exc:
+        print(f"sickbay: {exc}", file=sys.stderr)
+        return EXIT_UNREADABLE
+    data = dumps_result(result)
+    if args.out is None:
+        sys.stdout.flush()
+        sys.stdout.buffer.write(data)
+        sys.stdout.buffer.flush()
+    else:
+        try:
+            args.out.write_bytes(data)
+        except OSError as exc:
+            print(f"sickbay: cannot write {args.out}: {exc}", file=sys.stderr)
+            return EXIT_USAGE
+    print(summary_line(result), file=sys.stderr)
+    return EXIT_OK
+
+
+def _eval_dump(args: argparse.Namespace) -> int:
+    if not args.dry_run:
+        print("sickbay: the dump baseline needs a model provider (batch 4)", file=sys.stderr)
+        return EXIT_USAGE
+    out: Path | None = args.out
+    if out is None:
+        print("sickbay: --dry-run needs --out DIR", file=sys.stderr)
+        return EXIT_USAGE
+    try:
+        texts = []
+        for incident_dir, label in dev_incidents(args.incidents, _note):
+            _, text = build_dump(open_incident(incident_dir))
+            texts.append((label.id, text))
+    except (LabelError, SnapshotError) as exc:
+        print(f"sickbay: {exc}", file=sys.stderr)
+        return EXIT_UNREADABLE
+    try:
+        out.mkdir(parents=True, exist_ok=True)
+        for incident, text in texts:
+            (out / f"{incident}.dump.txt").write_bytes(text.encode("utf-8"))
+    except OSError as exc:
+        print(f"sickbay: cannot write {out}: {exc}", file=sys.stderr)
+        return EXIT_USAGE
+    print(f"dump: wrote {len(texts)} dump files -> {out}", file=sys.stderr)
+    return EXIT_OK
+
+
+def _cmd_eval(args: argparse.Namespace) -> int:
+    if args.baseline == "dump":
+        return _eval_dump(args)
+    return _eval_keyword(args)
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     args = _build_parser().parse_args(argv)
     if args.command == "capture":
         return _cmd_capture(args)
     if args.command == "tool":
         return _cmd_tool(args)
+    if args.command == "eval":
+        return _cmd_eval(args)
     return _cmd_verify(args)

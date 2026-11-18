@@ -2,3 +2,4 @@
 *.sh text eol=lf
 incidents/*/snapshot/** -text
 tests/fixtures/** -text
+results/** -text

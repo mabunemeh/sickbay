@@ -1,9 +1,11 @@
 import json
+import re
 import shutil
 import sys
 from pathlib import Path
 
 import pytest
+from evalfakes import label_yaml
 
 from sickbay.cli import main
 
@@ -113,3 +115,107 @@ def test_tool_malformed_manifest_exits_3(tmp_path: Path) -> None:
         c.pop("exit_code")
     p.write_text(json.dumps(m))
     assert main(["tool", str(tmp_path / "s"), "list_units"]) == 3
+
+
+# -- eval -------------------------------------------------------------------------------------
+
+
+def _incidents(tmp_path: Path, label: str | None = None) -> Path:
+    root = tmp_path / "incidents"
+    shutil.copytree(FIXTURE, root / "a-case" / "snapshot")
+    text = label if label is not None else label_yaml("a-case")
+    (root / "a-case" / "label.yaml").write_bytes(text.encode("utf-8"))
+    return root
+
+
+def test_eval_keyword_to_stdout_exits_0(
+    tmp_path: Path, capsysbinary: pytest.CaptureFixture[bytes]
+) -> None:
+    assert main(["eval", "--baseline", "keyword", "--incidents", str(_incidents(tmp_path))]) == 0
+    captured = capsysbinary.readouterr()
+    result = json.loads(captured.out)
+    assert result["result_schema"] == 1 and result["cases"][0]["incident"] == "a-case"
+    assert captured.err.startswith(b"keyword: category ")
+    assert captured.err.endswith(b"(n=1)\n") or captured.err.endswith(b"(n=1)\r\n")
+
+
+def test_eval_keyword_to_file_exits_0(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    out = tmp_path / "r.json"
+    args = ["eval", "--baseline", "keyword", "--incidents", str(_incidents(tmp_path))]
+    assert main([*args, "--out", str(out)]) == 0
+    data = out.read_bytes()
+    assert b"\r" not in data and data.endswith(b"}\n")
+    assert capsys.readouterr().out == ""
+
+
+def test_eval_default_incidents_dir(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsysbinary: pytest.CaptureFixture[bytes]
+) -> None:
+    _incidents(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    assert main(["eval", "--baseline", "keyword"]) == 0
+    assert json.loads(capsysbinary.readouterr().out)["summary"]["cases"] == 1
+
+
+def test_eval_usage_errors_exit_2(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    root = str(_incidents(tmp_path))
+    assert main(["eval", "--baseline", "dump", "--incidents", root]) == 2
+    assert "needs a model provider (batch 4)" in capsys.readouterr().err
+    assert main(["eval", "--baseline", "dump", "--incidents", root, "--dry-run"]) == 2
+    assert main(["eval", "--baseline", "keyword", "--incidents", root, "--dry-run"]) == 2
+    bad_out = str(tmp_path / "no" / "such" / "dir" / "r.json")
+    assert main(["eval", "--baseline", "keyword", "--incidents", root, "--out", bad_out]) == 2
+    (tmp_path / "file").write_bytes(b"x")
+    dump_args = ["eval", "--baseline", "dump", "--incidents", root, "--dry-run"]
+    assert main([*dump_args, "--out", str(tmp_path / "file")]) == 2
+    with pytest.raises(SystemExit) as exc:
+        main(["eval", "--baseline", "nope"])
+    assert exc.value.code == 2
+    with pytest.raises(SystemExit) as exc:
+        main(["eval"])
+    assert exc.value.code == 2
+
+
+def test_eval_dump_dry_run_writes_files(tmp_path: Path) -> None:
+    out = tmp_path / "dumps"
+    args = ["eval", "--baseline", "dump", "--incidents", str(_incidents(tmp_path))]
+    assert main([*args, "--dry-run", "--out", str(out)]) == 0
+    text = (out / "a-case.dump.txt").read_bytes()
+    assert text.startswith(b"### c1 list_units ") and text.endswith(b"### dump_truncated false\n")
+    assert b"\r" not in text
+
+
+@pytest.mark.parametrize("baseline", [["keyword"], ["dump", "--dry-run", "--out", "OUT"]])
+def test_eval_bad_label_or_snapshot_exits_3(tmp_path: Path, baseline: list[str]) -> None:
+    extra = [str(tmp_path / "out") if a == "OUT" else a for a in baseline]
+    bad_label = _incidents(tmp_path / "1", label_yaml("a-case", label_schema=0))
+    assert main(["eval", "--incidents", str(bad_label), "--baseline", *extra]) == 3
+    corrupt = _incidents(tmp_path / "2")
+    (corrupt / "a-case" / "snapshot" / "commands" / "df.txt").write_bytes(b"tampered")
+    assert main(["eval", "--incidents", str(corrupt), "--baseline", *extra]) == 3
+    missing = tmp_path / "3" / "label-missing"
+    shutil.copytree(FIXTURE, missing / "a-case" / "snapshot")
+    assert main(["eval", "--incidents", str(missing), "--baseline", *extra]) == 3
+    assert main(["eval", "--incidents", str(tmp_path / "none"), "--baseline", *extra]) == 3
+
+
+def test_eval_dump_skips_heldout_and_makes_nested_out(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    root = _incidents(tmp_path)
+    shutil.copytree(FIXTURE, root / "h-case" / "snapshot")
+    (root / "h-case" / "label.yaml").write_bytes(label_yaml("h-case", split="heldout").encode())
+    out = tmp_path / "deep" / "er" / "dumps"
+    args = ["eval", "--baseline", "dump", "--incidents", str(root), "--dry-run"]
+    assert main([*args, "--out", str(out)]) == 0
+    assert sorted(p.name for p in out.iterdir()) == ["a-case.dump.txt"]
+    assert "skipped heldout incident h-case" in capsys.readouterr().err
+
+
+def test_eval_summary_line_has_three_decimals(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    out = tmp_path / "r.json"
+    args = ["eval", "--baseline", "keyword", "--incidents", str(_incidents(tmp_path))]
+    assert main([*args, "--out", str(out)]) == 0
+    assert re.search(r"grounding \d\.\d{3} \(n=1\)$", capsys.readouterr().err.strip())

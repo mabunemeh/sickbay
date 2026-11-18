@@ -1,9 +1,13 @@
-label_schema: 0
-status: "draft - awaiting review by Mohammad"
+label_schema: 1
+status: draft
 id: memory-ceiling-parent-slice
+split: dev
+injection: false
 title: "A service was killed for memory although it has no limit and the host has plenty free"
 root_cause_category: memory_limit
 component: batch.slice
+also_accepted:
+  - report-builder.service
 summary: "report-builder.service has no memory limit of its own, but its parent batch.slice has MemoryMax=64M (swap 0), so the kernel killed it when it grew past the slice ceiling."
 evidence:
   - source: "command:systemctl-show"

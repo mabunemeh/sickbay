@@ -15,11 +15,11 @@ import ipaddress
 import os
 import re
 from pathlib import Path
-from typing import Any
 
 import pytest
-import yaml
 
+from sickbay.evals.labels import Label
+from sickbay.evals.labels import load_label as load_label_file
 from sickbay.snapshot import Snapshot
 
 REPO = Path(__file__).resolve().parent.parent
@@ -48,10 +48,8 @@ SNAPSHOTS = incident_snapshots()
 IDS = sorted(SNAPSHOTS)
 
 
-def load_label(incident: str) -> dict[str, Any]:
-    data = yaml.safe_load((REPO / "incidents" / incident / "label.yaml").read_text("utf-8"))
-    assert isinstance(data, dict)
-    return data
+def load_label(incident: str) -> Label:
+    return load_label_file(REPO / "incidents" / incident / "label.yaml")
 
 
 def all_files(root: Path) -> dict[str, bytes]:
@@ -102,9 +100,9 @@ def test_verifies_scrubbed_and_round_trips(incident: str, tmp_path: Path) -> Non
 
 def test_label_is_a_draft_with_required_fields(incident: str) -> None:
     label = load_label(incident)
-    assert label["id"] == incident
-    assert label["label_schema"] == 0
-    assert str(label["status"]).startswith("draft")
+    assert label.id == incident
+    assert label.label_schema == 1
+    assert label.status == "draft"
     for key in (
         "title",
         "root_cause_category",
@@ -114,22 +112,22 @@ def test_label_is_a_draft_with_required_fields(incident: str) -> None:
         "leak_strings",
         "names",
     ):
-        assert label[key], key
-    assert label["evidence"]
+        assert getattr(label, key), key
+    assert label.evidence
 
 
 def test_every_evidence_item_is_found(incident: str) -> None:
     snap = Snapshot.open(SNAPSHOTS[incident])
-    for item in load_label(incident)["evidence"]:
-        needle = item["contains"].encode("utf-8")
-        texts = evidence_texts(snap, item["source"])
-        assert texts, f"no data for {item['source']}"
-        assert any(needle in t for t in texts), f"{item['contains']!r} not in {item['source']}"
+    for item in load_label(incident).evidence:
+        needle = item.contains.encode("utf-8")
+        texts = evidence_texts(snap, item.source)
+        assert texts, f"no data for {item.source}"
+        assert any(needle in t for t in texts), f"{item.contains!r} not in {item.source}"
 
 
 def test_no_answer_or_tooling_leaks(incident: str) -> None:
     label = load_label(incident)
-    banned = [incident, label["root_cause_category"], *label["leak_strings"], *TOOLING_WORDS]
+    banned = [incident, label.root_cause_category, *label.leak_strings, *TOOLING_WORDS]
     files = all_files(SNAPSHOTS[incident])
     for rel, data in files.items():
         text = data.lower()
@@ -164,12 +162,12 @@ def test_no_real_identity_or_public_ip(incident: str) -> None:
 
 def test_no_other_incidents_names_in_snapshot(incident: str) -> None:
     """Catches stale state from an earlier run (for example a journal re-imported at boot)."""
-    own = {n.lower() for n in load_label(incident)["names"]}
+    own = {n.lower() for n in load_label(incident).names}
     foreign = {
         n.lower()
         for other in sorted(p.name for p in (REPO / "incidents").iterdir() if p.is_dir())
         if other != incident
-        for n in load_label(other)["names"]
+        for n in load_label(other).names
     } - own
     assert foreign
     for rel, data in all_files(SNAPSHOTS[incident]).items():

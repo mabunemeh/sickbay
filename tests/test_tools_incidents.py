@@ -73,8 +73,8 @@ def test_every_tool_runs_on_the_incident(incident: str) -> None:
         seen.add(name)
         return ok(snap, name, **args)
 
-    assert run("list_units", name_contains=label["names"][0])["total"] >= 1
-    assert run("unit_status", unit=label["component"])["unit"] == label["component"]
+    assert run("list_units", name_contains=label.names[0])["total"] >= 1
+    assert run("unit_status", unit=label.component)["unit"] == label.component
     assert run("journal_query", priority_max=6)["returned"] > 0
     assert run("process_list", sort="rss")["processes"][0]["pid"].isdigit()
     assert run("process_limits", pid="1")["open_fds"] > 0
@@ -89,14 +89,14 @@ def test_every_tool_runs_on_the_incident(incident: str) -> None:
 def test_evidence_is_reachable_through_tools(incident: str) -> None:
     snap = Snapshot.open(SNAPSHOTS[incident])
     label = load_label(incident)
-    for item in label["evidence"]:
-        needle, source = item["contains"], item["source"]
+    for item in label.evidence:
+        needle, source = item.contains, item.source
         kind, _, ref = source.partition(":")
         if kind == "journal":
             entries = ok(snap, "journal_query", contains=needle, limit=200)["entries"]
             texts = [e["message"] for e in entries]
         elif source == "command:systemctl-show":
-            texts = unit_texts(snap, label["names"])
+            texts = unit_texts(snap, list(label.names))
         elif kind == "file":
             texts = [read_whole(snap, p) for p in expand(snap, ref)]
         else:

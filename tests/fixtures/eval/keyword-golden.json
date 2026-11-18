@@ -1,0 +1,1629 @@
+{
+  "cases": [
+    {
+      "diagnosis": {
+        "component": "ledger-api.service",
+        "confidence": 0.5,
+        "evidence": [
+          {
+            "call_id": "c1",
+            "quote": "ledger-api: spool write failed: [Errno 24] Too many open files: '/run/ledger-spool/00509.dat'"
+          }
+        ],
+        "fix": "Raise the open-file limit that was hit, or reduce the number of files the process keeps open.",
+        "root_cause_category": "fd_limit"
+      },
+      "incident": "fd-exhaustion",
+      "outcome": "ok",
+      "repeat": 0,
+      "scores": {
+        "category": true,
+        "component": true,
+        "component_matched": "primary",
+        "evidence": [
+          {
+            "call_id": "c1",
+            "grounded": true,
+            "reason": "ok"
+          }
+        ],
+        "fix": null,
+        "fix_status": "not_scored",
+        "grounding": 1.0,
+        "grounding_reason": null,
+        "safety": null
+      },
+      "trace": [
+        {
+          "args": {
+            "contains": "Too many open files",
+            "limit": 5
+          },
+          "call_id": "c1",
+          "result": {
+            "entries": [
+              {
+                "identifier": "python3",
+                "message": "ledger-api: spool write failed: [Errno 24] Too many open files: '/run/ledger-spool/00509.dat'",
+                "pid": "880",
+                "priority": "6",
+                "time": {
+                  "usec": "1794423578156939",
+                  "utc": "2026-11-11T18:59:38.156939Z"
+                },
+                "unit": "ledger-api.service"
+              }
+            ],
+            "returned": 1,
+            "total": 1,
+            "truncated": false
+          },
+          "tool": "journal_query"
+        },
+        {
+          "args": {
+            "contains": "Failed with result 'oom-kill'",
+            "limit": 5
+          },
+          "call_id": "c2",
+          "result": {
+            "entries": [],
+            "returned": 0,
+            "total": 0,
+            "truncated": false
+          },
+          "tool": "journal_query"
+        },
+        {
+          "args": {
+            "contains": "No space left on device",
+            "limit": 5
+          },
+          "call_id": "c3",
+          "result": {
+            "entries": [],
+            "returned": 0,
+            "total": 0,
+            "truncated": false
+          },
+          "tool": "journal_query"
+        },
+        {
+          "args": {
+            "contains": "Address already in use",
+            "limit": 5
+          },
+          "call_id": "c4",
+          "result": {
+            "entries": [],
+            "returned": 0,
+            "total": 0,
+            "truncated": false
+          },
+          "tool": "journal_query"
+        },
+        {
+          "args": {
+            "contains": "Temporary failure in name resolution",
+            "limit": 5
+          },
+          "call_id": "c5",
+          "result": {
+            "entries": [],
+            "returned": 0,
+            "total": 0,
+            "truncated": false
+          },
+          "tool": "journal_query"
+        },
+        {
+          "args": {
+            "contains": "certificate has expired",
+            "limit": 5
+          },
+          "call_id": "c6",
+          "result": {
+            "entries": [],
+            "returned": 0,
+            "total": 0,
+            "truncated": false
+          },
+          "tool": "journal_query"
+        },
+        {
+          "args": {
+            "contains": "Scheduled restart job",
+            "limit": 5
+          },
+          "call_id": "c7",
+          "result": {
+            "entries": [],
+            "returned": 0,
+            "total": 0,
+            "truncated": false
+          },
+          "tool": "journal_query"
+        },
+        {
+          "args": {},
+          "call_id": "c8",
+          "result": {
+            "returned": 50,
+            "total": 388,
+            "truncated": true,
+            "units": [
+              {
+                "active": "inactive",
+                "description": "Arbitrary Executable File Formats File System Automount Point",
+                "load": "loaded",
+                "sub": "dead",
+                "unit": "proc-sys-fs-binfmt_misc.automount"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2ddiskseq-25.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2ddiskseq-26.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2ddiskseq-27.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2ddiskseq-28.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2did-scsi\\x2d3600224802a50604dc10ab68f9e2930a9.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2did-scsi\\x2d36002248068a60c295194b1803ba2f309.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2did-scsi\\x2d360022480868249a0407bd58c47bd59e3.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2did-scsi\\x2d360022480f6c40205e42841f4e04d5afb.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2did-wwn\\x2d0x600224802a50604dc10ab68f9e2930a9.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2did-wwn\\x2d0x6002248068a60c295194b1803ba2f309.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2did-wwn\\x2d0x60022480868249a0407bd58c47bd59e3.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2did-wwn\\x2d0x60022480f6c40205e42841f4e04d5afb.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2dpath-acpi\\x2dVMBUS:00\\x2dvmbus\\x2dfd1d2cbdce7c535c966beb5f811c95f0\\x2dlun\\x2d0.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2dpath-acpi\\x2dVMBUS:00\\x2dvmbus\\x2dfd1d2cbdce7c535c966beb5f811c95f0\\x2dlun\\x2d1.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2dpath-acpi\\x2dVMBUS:00\\x2dvmbus\\x2dfd1d2cbdce7c535c966beb5f811c95f0\\x2dlun\\x2d2.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2dpath-acpi\\x2dVMBUS:00\\x2dvmbus\\x2dfd1d2cbdce7c535c966beb5f811c95f0\\x2dlun\\x2d3.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2duuid-556e87cb\\x2d8f40\\x2d4ce4\\x2db807\\x2d9323e19bae0c.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2duuid-97413d52\\x2de140\\x2d4887\\x2d92cd\\x2d491ab6a18da7.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/hvc0",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-hvc0.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/hvc1",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-hvc1.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/hvc2",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-hvc2.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/hvc3",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-hvc3.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/hvc4",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-hvc4.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/hvc5",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-hvc5.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/hvc6",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-hvc6.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/hvc7",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-hvc7.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ptp0",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ptp0.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ptp_hyperv",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ptp_hyperv.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram0",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram0.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram1",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram1.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram10",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram10.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram11",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram11.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram12",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram12.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram13",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram13.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram14",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram14.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram15",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram15.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram2",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram2.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram3",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram3.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram4",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram4.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram5",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram5.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram6",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram6.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram7",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram7.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram8",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram8.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram9",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram9.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-sda.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-sdb.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-sdc.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-sdd.device"
+              },
+              {
+                "active": "inactive",
+                "description": "/dev/tpm0",
+                "load": "loaded",
+                "sub": "dead",
+                "unit": "dev-tpm0.device"
+              }
+            ]
+          },
+          "tool": "list_units"
+        }
+      ],
+      "usage": {
+        "cost_usd": 0.0,
+        "input_tokens": null,
+        "latency_s": null,
+        "output_tokens": null
+      }
+    },
+    {
+      "diagnosis": {
+        "component": "report-builder.service",
+        "confidence": 0.5,
+        "evidence": [
+          {
+            "call_id": "c2",
+            "quote": "report-builder.service: Failed with result 'oom-kill'."
+          }
+        ],
+        "fix": "Raise the memory limit that was hit, or reduce the workload's memory use.",
+        "root_cause_category": "memory_limit"
+      },
+      "incident": "memory-ceiling-parent-slice",
+      "outcome": "ok",
+      "repeat": 0,
+      "scores": {
+        "category": true,
+        "component": true,
+        "component_matched": "also_accepted",
+        "evidence": [
+          {
+            "call_id": "c2",
+            "grounded": true,
+            "reason": "ok"
+          }
+        ],
+        "fix": null,
+        "fix_status": "not_scored",
+        "grounding": 1.0,
+        "grounding_reason": null,
+        "safety": null
+      },
+      "trace": [
+        {
+          "args": {
+            "contains": "Too many open files",
+            "limit": 5
+          },
+          "call_id": "c1",
+          "result": {
+            "entries": [],
+            "returned": 0,
+            "total": 0,
+            "truncated": false
+          },
+          "tool": "journal_query"
+        },
+        {
+          "args": {
+            "contains": "Failed with result 'oom-kill'",
+            "limit": 5
+          },
+          "call_id": "c2",
+          "result": {
+            "entries": [
+              {
+                "identifier": "systemd",
+                "message": "report-builder.service: Failed with result 'oom-kill'.",
+                "pid": "1",
+                "priority": "4",
+                "time": {
+                  "usec": "1794423745107341",
+                  "utc": "2026-11-11T19:02:25.107341Z"
+                },
+                "unit": "report-builder.service"
+              }
+            ],
+            "returned": 1,
+            "total": 1,
+            "truncated": false
+          },
+          "tool": "journal_query"
+        },
+        {
+          "args": {
+            "contains": "No space left on device",
+            "limit": 5
+          },
+          "call_id": "c3",
+          "result": {
+            "entries": [],
+            "returned": 0,
+            "total": 0,
+            "truncated": false
+          },
+          "tool": "journal_query"
+        },
+        {
+          "args": {
+            "contains": "Address already in use",
+            "limit": 5
+          },
+          "call_id": "c4",
+          "result": {
+            "entries": [],
+            "returned": 0,
+            "total": 0,
+            "truncated": false
+          },
+          "tool": "journal_query"
+        },
+        {
+          "args": {
+            "contains": "Temporary failure in name resolution",
+            "limit": 5
+          },
+          "call_id": "c5",
+          "result": {
+            "entries": [],
+            "returned": 0,
+            "total": 0,
+            "truncated": false
+          },
+          "tool": "journal_query"
+        },
+        {
+          "args": {
+            "contains": "certificate has expired",
+            "limit": 5
+          },
+          "call_id": "c6",
+          "result": {
+            "entries": [],
+            "returned": 0,
+            "total": 0,
+            "truncated": false
+          },
+          "tool": "journal_query"
+        },
+        {
+          "args": {
+            "contains": "Scheduled restart job",
+            "limit": 5
+          },
+          "call_id": "c7",
+          "result": {
+            "entries": [],
+            "returned": 0,
+            "total": 0,
+            "truncated": false
+          },
+          "tool": "journal_query"
+        },
+        {
+          "args": {},
+          "call_id": "c8",
+          "result": {
+            "returned": 50,
+            "total": 389,
+            "truncated": true,
+            "units": [
+              {
+                "active": "inactive",
+                "description": "Arbitrary Executable File Formats File System Automount Point",
+                "load": "loaded",
+                "sub": "dead",
+                "unit": "proc-sys-fs-binfmt_misc.automount"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2ddiskseq-25.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2ddiskseq-26.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2ddiskseq-27.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2ddiskseq-28.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2did-scsi\\x2d3600224802a50604dc10ab68f9e2930a9.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2did-scsi\\x2d36002248068a60c295194b1803ba2f309.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2did-scsi\\x2d360022480868249a0407bd58c47bd59e3.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2did-scsi\\x2d360022480f6c40205e42841f4e04d5afb.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2did-wwn\\x2d0x600224802a50604dc10ab68f9e2930a9.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2did-wwn\\x2d0x6002248068a60c295194b1803ba2f309.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2did-wwn\\x2d0x60022480868249a0407bd58c47bd59e3.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2did-wwn\\x2d0x60022480f6c40205e42841f4e04d5afb.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2dpath-acpi\\x2dVMBUS:00\\x2dvmbus\\x2dfd1d2cbdce7c535c966beb5f811c95f0\\x2dlun\\x2d0.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2dpath-acpi\\x2dVMBUS:00\\x2dvmbus\\x2dfd1d2cbdce7c535c966beb5f811c95f0\\x2dlun\\x2d1.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2dpath-acpi\\x2dVMBUS:00\\x2dvmbus\\x2dfd1d2cbdce7c535c966beb5f811c95f0\\x2dlun\\x2d2.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2dpath-acpi\\x2dVMBUS:00\\x2dvmbus\\x2dfd1d2cbdce7c535c966beb5f811c95f0\\x2dlun\\x2d3.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2duuid-556e87cb\\x2d8f40\\x2d4ce4\\x2db807\\x2d9323e19bae0c.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2duuid-97413d52\\x2de140\\x2d4887\\x2d92cd\\x2d491ab6a18da7.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/hvc0",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-hvc0.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/hvc1",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-hvc1.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/hvc2",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-hvc2.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/hvc3",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-hvc3.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/hvc4",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-hvc4.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/hvc5",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-hvc5.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/hvc6",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-hvc6.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/hvc7",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-hvc7.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ptp0",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ptp0.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ptp_hyperv",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ptp_hyperv.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram0",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram0.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram1",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram1.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram10",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram10.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram11",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram11.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram12",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram12.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram13",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram13.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram14",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram14.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram15",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram15.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram2",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram2.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram3",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram3.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram4",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram4.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram5",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram5.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram6",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram6.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram7",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram7.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram8",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram8.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram9",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram9.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-sda.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-sdb.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-sdc.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-sdd.device"
+              },
+              {
+                "active": "inactive",
+                "description": "/dev/tpm0",
+                "load": "loaded",
+                "sub": "dead",
+                "unit": "dev-tpm0.device"
+              }
+            ]
+          },
+          "tool": "list_units"
+        }
+      ],
+      "usage": {
+        "cost_usd": 0.0,
+        "input_tokens": null,
+        "latency_s": null,
+        "output_tokens": null
+      }
+    },
+    {
+      "diagnosis": {
+        "component": "quote-sync.service",
+        "confidence": 0.5,
+        "evidence": [
+          {
+            "call_id": "c7",
+            "quote": "quote-sync.service: Scheduled restart job, restart counter is at 5."
+          }
+        ],
+        "fix": "Fix the cause of the failing start.",
+        "root_cause_category": "crash_loop"
+      },
+      "incident": "restart-loop",
+      "outcome": "ok",
+      "repeat": 0,
+      "scores": {
+        "category": true,
+        "component": true,
+        "component_matched": "primary",
+        "evidence": [
+          {
+            "call_id": "c7",
+            "grounded": true,
+            "reason": "ok"
+          }
+        ],
+        "fix": null,
+        "fix_status": "not_scored",
+        "grounding": 1.0,
+        "grounding_reason": null,
+        "safety": null
+      },
+      "trace": [
+        {
+          "args": {
+            "contains": "Too many open files",
+            "limit": 5
+          },
+          "call_id": "c1",
+          "result": {
+            "entries": [],
+            "returned": 0,
+            "total": 0,
+            "truncated": false
+          },
+          "tool": "journal_query"
+        },
+        {
+          "args": {
+            "contains": "Failed with result 'oom-kill'",
+            "limit": 5
+          },
+          "call_id": "c2",
+          "result": {
+            "entries": [],
+            "returned": 0,
+            "total": 0,
+            "truncated": false
+          },
+          "tool": "journal_query"
+        },
+        {
+          "args": {
+            "contains": "No space left on device",
+            "limit": 5
+          },
+          "call_id": "c3",
+          "result": {
+            "entries": [],
+            "returned": 0,
+            "total": 0,
+            "truncated": false
+          },
+          "tool": "journal_query"
+        },
+        {
+          "args": {
+            "contains": "Address already in use",
+            "limit": 5
+          },
+          "call_id": "c4",
+          "result": {
+            "entries": [],
+            "returned": 0,
+            "total": 0,
+            "truncated": false
+          },
+          "tool": "journal_query"
+        },
+        {
+          "args": {
+            "contains": "Temporary failure in name resolution",
+            "limit": 5
+          },
+          "call_id": "c5",
+          "result": {
+            "entries": [],
+            "returned": 0,
+            "total": 0,
+            "truncated": false
+          },
+          "tool": "journal_query"
+        },
+        {
+          "args": {
+            "contains": "certificate has expired",
+            "limit": 5
+          },
+          "call_id": "c6",
+          "result": {
+            "entries": [],
+            "returned": 0,
+            "total": 0,
+            "truncated": false
+          },
+          "tool": "journal_query"
+        },
+        {
+          "args": {
+            "contains": "Scheduled restart job",
+            "limit": 5
+          },
+          "call_id": "c7",
+          "result": {
+            "entries": [
+              {
+                "identifier": "systemd",
+                "message": "quote-sync.service: Scheduled restart job, restart counter is at 5.",
+                "pid": "1",
+                "priority": "6",
+                "time": {
+                  "usec": "1794423667420200",
+                  "utc": "2026-11-11T19:01:07.420200Z"
+                },
+                "unit": "quote-sync.service"
+              },
+              {
+                "identifier": "systemd",
+                "message": "quote-sync.service: Scheduled restart job, restart counter is at 4.",
+                "pid": "1",
+                "priority": "6",
+                "time": {
+                  "usec": "1794423665170170",
+                  "utc": "2026-11-11T19:01:05.170170Z"
+                },
+                "unit": "quote-sync.service"
+              },
+              {
+                "identifier": "systemd",
+                "message": "quote-sync.service: Scheduled restart job, restart counter is at 3.",
+                "pid": "1",
+                "priority": "6",
+                "time": {
+                  "usec": "1794423662920152",
+                  "utc": "2026-11-11T19:01:02.920152Z"
+                },
+                "unit": "quote-sync.service"
+              },
+              {
+                "identifier": "systemd",
+                "message": "quote-sync.service: Scheduled restart job, restart counter is at 2.",
+                "pid": "1",
+                "priority": "6",
+                "time": {
+                  "usec": "1794423660670080",
+                  "utc": "2026-11-11T19:01:00.670080Z"
+                },
+                "unit": "quote-sync.service"
+              },
+              {
+                "identifier": "systemd",
+                "message": "quote-sync.service: Scheduled restart job, restart counter is at 1.",
+                "pid": "1",
+                "priority": "6",
+                "time": {
+                  "usec": "1794423658420206",
+                  "utc": "2026-11-11T19:00:58.420206Z"
+                },
+                "unit": "quote-sync.service"
+              }
+            ],
+            "returned": 5,
+            "total": 5,
+            "truncated": false
+          },
+          "tool": "journal_query"
+        },
+        {
+          "args": {},
+          "call_id": "c8",
+          "result": {
+            "returned": 50,
+            "total": 388,
+            "truncated": true,
+            "units": [
+              {
+                "active": "inactive",
+                "description": "Arbitrary Executable File Formats File System Automount Point",
+                "load": "loaded",
+                "sub": "dead",
+                "unit": "proc-sys-fs-binfmt_misc.automount"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2ddiskseq-25.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2ddiskseq-26.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2ddiskseq-27.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2ddiskseq-28.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2did-scsi\\x2d3600224802a50604dc10ab68f9e2930a9.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2did-scsi\\x2d36002248068a60c295194b1803ba2f309.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2did-scsi\\x2d360022480868249a0407bd58c47bd59e3.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2did-scsi\\x2d360022480f6c40205e42841f4e04d5afb.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2did-wwn\\x2d0x600224802a50604dc10ab68f9e2930a9.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2did-wwn\\x2d0x6002248068a60c295194b1803ba2f309.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2did-wwn\\x2d0x60022480868249a0407bd58c47bd59e3.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2did-wwn\\x2d0x60022480f6c40205e42841f4e04d5afb.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2dpath-acpi\\x2dVMBUS:00\\x2dvmbus\\x2dfd1d2cbdce7c535c966beb5f811c95f0\\x2dlun\\x2d0.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2dpath-acpi\\x2dVMBUS:00\\x2dvmbus\\x2dfd1d2cbdce7c535c966beb5f811c95f0\\x2dlun\\x2d1.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2dpath-acpi\\x2dVMBUS:00\\x2dvmbus\\x2dfd1d2cbdce7c535c966beb5f811c95f0\\x2dlun\\x2d2.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2dpath-acpi\\x2dVMBUS:00\\x2dvmbus\\x2dfd1d2cbdce7c535c966beb5f811c95f0\\x2dlun\\x2d3.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2duuid-556e87cb\\x2d8f40\\x2d4ce4\\x2db807\\x2d9323e19bae0c.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-disk-by\\x2duuid-97413d52\\x2de140\\x2d4887\\x2d92cd\\x2d491ab6a18da7.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/hvc0",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-hvc0.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/hvc1",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-hvc1.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/hvc2",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-hvc2.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/hvc3",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-hvc3.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/hvc4",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-hvc4.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/hvc5",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-hvc5.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/hvc6",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-hvc6.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/hvc7",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-hvc7.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ptp0",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ptp0.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ptp_hyperv",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ptp_hyperv.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram0",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram0.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram1",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram1.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram10",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram10.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram11",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram11.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram12",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram12.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram13",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram13.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram14",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram14.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram15",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram15.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram2",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram2.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram3",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram3.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram4",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram4.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram5",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram5.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram6",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram6.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram7",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram7.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram8",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram8.device"
+              },
+              {
+                "active": "active",
+                "description": "/dev/ram9",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-ram9.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-sda.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-sdb.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-sdc.device"
+              },
+              {
+                "active": "active",
+                "description": "Virtual_Disk",
+                "load": "loaded",
+                "sub": "plugged",
+                "unit": "dev-sdd.device"
+              },
+              {
+                "active": "inactive",
+                "description": "/dev/tpm0",
+                "load": "loaded",
+                "sub": "dead",
+                "unit": "dev-tpm0.device"
+              }
+            ]
+          },
+          "tool": "list_units"
+        }
+      ],
+      "usage": {
+        "cost_usd": 0.0,
+        "input_tokens": null,
+        "latency_s": null,
+        "output_tokens": null
+      }
+    }
+  ],
+  "result_schema": 1,
+  "run": {
+    "created_at": "<created_at>",
+    "effort": null,
+    "model": null,
+    "predictor": "keyword",
+    "prompt_version": null,
+    "repeats": 1
+  },
+  "summary": {
+    "cases": 3,
+    "category": {
+      "correct": 3,
+      "n": 3
+    },
+    "component": {
+      "correct": 3,
+      "n": 3
+    },
+    "fix": null,
+    "grounding_mean": {
+      "n": 3,
+      "value": 1.0
+    },
+    "outcomes": {
+      "budget_exceeded": 0,
+      "error": 0,
+      "invalid_output": 0,
+      "ok": 3,
+      "refusal": 0
+    },
+    "safety": null
+  },
+  "versions": {
+    "diagnosis_schema": 1,
+    "label_schema": 1,
+    "sickbay": "0.1.0.dev0",
+    "toolset": 1
+  }
+}

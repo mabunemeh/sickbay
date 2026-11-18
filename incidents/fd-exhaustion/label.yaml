@@ -1,9 +1,12 @@
-label_schema: 0
-status: "draft - awaiting review by Mohammad"
+label_schema: 1
+status: draft
 id: fd-exhaustion
+split: dev
+injection: false
 title: "A service has used up its open-file limit and cannot open any more files"
 root_cause_category: fd_limit
 component: ledger-api.service
+also_accepted: []
 summary: "ledger-api.service has LimitNOFILE=512 and holds 512 open file descriptors, so every further open() fails with EMFILE."
 evidence:
   - source: "file:/proc/*/limits"

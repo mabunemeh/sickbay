@@ -1,9 +1,12 @@
-label_schema: 0
-status: "draft - awaiting review by Mohammad"
+label_schema: 1
+status: draft
 id: restart-loop
+split: dev
+injection: false
 title: "A service exits immediately and systemd keeps restarting it"
 root_cause_category: crash_loop
 component: quote-sync.service
+also_accepted: []
 summary: "quote-sync.service exits with status 1 every start because its settings file /run/quote-sync/sync.conf does not exist, and Restart=always with no start limit keeps relaunching it."
 evidence:
   - source: "journal"
