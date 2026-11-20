@@ -17,7 +17,11 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+anthropic = [
+    "anthropic>=2.11,<3",
+]
 dev = [
+    "anthropic>=2.11,<3",
     "mypy",
     "pre-commit",
     "pytest",

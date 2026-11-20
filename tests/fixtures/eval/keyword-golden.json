@@ -1,6 +1,7 @@
 {
   "cases": [
     {
+      "detail": null,
       "diagnosis": {
         "component": "ledger-api.service",
         "confidence": 0.5,
@@ -508,6 +509,9 @@
         }
       ],
       "usage": {
+        "api_calls": 0,
+        "cache_creation_input_tokens": null,
+        "cache_read_input_tokens": null,
         "cost_usd": 0.0,
         "input_tokens": null,
         "latency_s": null,
@@ -515,6 +519,7 @@
       }
     },
     {
+      "detail": null,
       "diagnosis": {
         "component": "report-builder.service",
         "confidence": 0.5,
@@ -1022,6 +1027,9 @@
         }
       ],
       "usage": {
+        "api_calls": 0,
+        "cache_creation_input_tokens": null,
+        "cache_read_input_tokens": null,
         "cost_usd": 0.0,
         "input_tokens": null,
         "latency_s": null,
@@ -1029,6 +1037,7 @@
       }
     },
     {
+      "detail": null,
       "diagnosis": {
         "component": "quote-sync.service",
         "confidence": 0.5,
@@ -1580,6 +1589,9 @@
         }
       ],
       "usage": {
+        "api_calls": 0,
+        "cache_creation_input_tokens": null,
+        "cache_read_input_tokens": null,
         "cost_usd": 0.0,
         "input_tokens": null,
         "latency_s": null,
@@ -1587,14 +1599,18 @@
       }
     }
   ],
-  "result_schema": 1,
+  "result_schema": 2,
   "run": {
     "created_at": "<created_at>",
     "effort": null,
+    "max_usd": null,
     "model": null,
     "predictor": "keyword",
+    "prices_as_of": null,
     "prompt_version": null,
-    "repeats": 1
+    "provider": null,
+    "repeats": 1,
+    "spent_usd": 0.0
   },
   "summary": {
     "cases": 3,
@@ -1606,6 +1622,7 @@
       "correct": 3,
       "n": 3
     },
+    "cost_usd": 0.0,
     "fix": null,
     "grounding_mean": {
       "n": 3,
