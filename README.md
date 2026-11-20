@@ -6,7 +6,8 @@ it back through the same interface a live host would give.
 This is the first piece of a benchmark of sick Linux hosts. Today the repo has
 the snapshot format, `capture`, `verify`, the reader, ten read-only tools over
 snapshots, three seed incidents (`incidents/`, labels still drafts), and `sickbay eval`: a
-scored keyword baseline, and a dump baseline built but scored only from batch 4 ([method](docs/eval-methodology.md)).
+scored keyword baseline, a model-scored dump baseline and a read-only agent ([method](docs/eval-methodology.md)).
+Agent run: `pip install -e ".[anthropic]"`, set `ANTHROPIC_API_KEY`, then `sickbay eval --agent --model claude-haiku-5-5 --max-usd 0.50 --out results/agent-haiku.json`.
 Related, different work: SREBattle (live VMs, pass/fail), ITBench-AA and SREGym
 (Kubernetes).
 
