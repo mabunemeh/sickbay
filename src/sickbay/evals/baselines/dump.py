@@ -1,7 +1,8 @@
 """The dump baseline: a fixed recipe of tool calls, rendered as one text for a model.
 
-Batch 3 builds the dump only (`sickbay eval --baseline dump --dry-run`); a model scores
-it from batch 4. The recipe, all through the Recorder:
+`sickbay eval --baseline dump --dry-run` writes the dump texts; with --model, DumpPredictor
+sends one request per case (system = the dump-v1 prompt, user = the dump text, no tools)
+and its trace is the dump's trace. The recipe, all through the Recorder:
 
 1. list_units state=failed, then list_units state=activating (limit 200 each);
 2. journal_query, priority 0-4, limit 200;
@@ -17,7 +18,12 @@ always records `### dump_truncated <true|false>` and any dropped call ids.
 from __future__ import annotations
 
 from importlib import resources
+from typing import Any
 
+from sickbay.agent.pricing import Budget, price_for
+from sickbay.agent.providers.base import Provider
+from sickbay.agent.request import Meter, build_request, call_or_abort, final_outcome
+from sickbay.evals.predictor import Prediction
 from sickbay.evals.trace import Recorder, TraceEntry
 from sickbay.snapshot.hostview import HostView
 from sickbay.tools import serialize
@@ -91,3 +97,29 @@ def build_dump(view: HostView) -> tuple[list[TraceEntry], str]:
         recorder.call("unit_status", {"unit": unit})
     text, _, _ = render_dump(recorder.trace)
     return recorder.trace, text
+
+
+class DumpPredictor:
+    """The dump baseline scored by a model: one request per case, no tools."""
+
+    name = "dump"
+    prompt_version: str | None = PROMPT_VERSION
+
+    def __init__(self, provider: Provider, model: str, effort: str, budget: Budget) -> None:
+        price_for(model)  # UnknownPrice before any call
+        self.provider = provider
+        self.model: str | None = model
+        self.effort: str | None = effort
+        self.budget = budget
+        self._model = model
+        self._effort = effort
+        self._system = prompt_text()
+
+    def predict(self, view: HostView) -> Prediction:
+        trace, text = build_dump(view)
+        meter = Meter(self.provider, self._model, self.budget)
+        messages: list[dict[str, Any]] = [{"role": "user", "content": text}]
+        request = build_request(self._model, self._effort, self._system, messages)
+        response = call_or_abort(meter, request, trace)
+        outcome, diagnosis, detail = final_outcome(response)
+        return meter.prediction(outcome, diagnosis, trace, detail)

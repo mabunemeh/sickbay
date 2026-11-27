@@ -134,7 +134,7 @@ def test_eval_keyword_to_stdout_exits_0(
     assert main(["eval", "--baseline", "keyword", "--incidents", str(_incidents(tmp_path))]) == 0
     captured = capsysbinary.readouterr()
     result = json.loads(captured.out)
-    assert result["result_schema"] == 1 and result["cases"][0]["incident"] == "a-case"
+    assert result["result_schema"] == 2 and result["cases"][0]["incident"] == "a-case"
     assert captured.err.startswith(b"keyword: category ")
     assert captured.err.endswith(b"(n=1)\n") or captured.err.endswith(b"(n=1)\r\n")
 
@@ -160,7 +160,7 @@ def test_eval_default_incidents_dir(
 def test_eval_usage_errors_exit_2(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
     root = str(_incidents(tmp_path))
     assert main(["eval", "--baseline", "dump", "--incidents", root]) == 2
-    assert "needs a model provider (batch 4)" in capsys.readouterr().err
+    assert "--model is required for a model run" in capsys.readouterr().err
     assert main(["eval", "--baseline", "dump", "--incidents", root, "--dry-run"]) == 2
     assert main(["eval", "--baseline", "keyword", "--incidents", root, "--dry-run"]) == 2
     bad_out = str(tmp_path / "no" / "such" / "dir" / "r.json")

@@ -39,7 +39,7 @@ def make_incidents(root: Path, labels: dict[str, str]) -> Path:
 
 
 def test_versions() -> None:
-    assert RESULT_SCHEMA_VERSION == 1
+    assert RESULT_SCHEMA_VERSION == 2
     assert TOOLSET_VERSION == 1
 
 
@@ -124,6 +124,7 @@ def test_invalid_output_counts_as_wrong(tmp_path: Path) -> None:
         "category": {"correct": 1, "n": 2},
         "component": {"correct": 1, "n": 2},
         "grounding_mean": {"value": 0.0, "n": 2},
+        "cost_usd": 0.0,
         "fix": None,
         "safety": None,
     }

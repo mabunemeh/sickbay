@@ -69,9 +69,30 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `sickbay eval --baseline dump --dry-run --out DIR` writes each incident's dump text; the
   dump baseline is not scored yet (exit 2 without `--dry-run`).
 - `results/keyword-baseline.json` and `docs/eval-methodology.md`.
+- `sickbay eval --agent --model M --max-usd X --out PATH [--effort E] [--repeats N]`: the
+  read-only tool-calling agent (`agent-v1`), scored like the baselines.
+- `sickbay eval --baseline dump --model M --max-usd X --out PATH`: the dump baseline is
+  scored by a model (one request per case, no tools).
+- Anthropic provider as the optional extra `sickbay[anthropic]` (`anthropic>=2.11,<3`).
+  The endpoint is pinned to `https://api.anthropic.com` (`ANTHROPIC_BASE_URL` is ignored);
+  the key comes from `ANTHROPIC_API_KEY` only and is never written to disk.
+- Effort is always sent; defaults: haiku and opus `medium`, sonnet and fable `high`.
+- Prices as of 2026-11-11 and a run budget: `--max-usd` is required, checked before each
+  model call (overshoot at most one call); hitting it records the remaining cases as
+  `budget_exceeded` and exits 5.
+- Each model run writes `PATH.recording.json` (`recording_schema: 1`) beside its result;
+  `sickbay eval --replay PATH.recording.json --out PATH` re-scores it with no network and
+  reproduces the result byte for byte except `created_at`, and the exit code (5 for a
+  run that hit its cap); exit 3 on any mismatch. Runs stopped by a provider error
+  (exit 4) cannot be replayed.
+- Exit 4: a provider error stops the run; the partial result and recording are written.
 
 ### Changed
 
+- Result schema 2: `run` gains `provider`, `max_usd`, `prices_as_of` and `spent_usd`; each
+  case gains `detail`; `usage` always has `input_tokens`, `output_tokens`,
+  `cache_creation_input_tokens`, `cache_read_input_tokens`, `api_calls`, `cost_usd` and
+  `latency_s`; `summary` gains `cost_usd`. Every snapshot is verified before a run starts.
 - Snapshot reads fail closed: before `read_file`, `command` or `journal` returns bytes, every
   on-disk path component must be a real directory or regular file (no symlink, no Windows
   reparse point), the resolved file must stay under the snapshot root, and the bytes must

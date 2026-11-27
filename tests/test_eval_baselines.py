@@ -85,9 +85,13 @@ def test_keyword_fixed_trace_and_first_rule_wins() -> None:
     assert pred.usage == {
         "input_tokens": None,
         "output_tokens": None,
+        "cache_creation_input_tokens": None,
+        "cache_read_input_tokens": None,
+        "api_calls": 0,
         "cost_usd": 0.0,
         "latency_s": None,
     }
+    assert pred.detail is None
 
 
 def test_keyword_component_from_message_token_and_clipped_quote() -> None:
